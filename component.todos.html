@@ -1,0 +1,44 @@
+{{ define "ComponentTodos" }}
+<div {{ componentattrs . }}>
+    <div>Todos</div>
+    <div>
+        <div>
+            <input name="NewTitle" value="{{ .NewTitle }}" type="text" oninput="{{ bind `NewTitle` }}" />
+            <button onclick="{{ action `Add` }}" >Add Todo</button>
+        </div>
+        <ul>
+        {{ range .Todos }}
+            {{ if or (or (eq $.FilterType "All") (and (eq $.FilterType "Active") (not .Completed))) (and (eq $.FilterType "Completed") .Completed) }}
+                <li
+                    onclick="{{ action `Complete` .Id }}"
+                    {{ if .Completed }}
+                        style="text-decoration: line-through;"
+                    {{ end }}
+                >{{ .Title }}</li>
+            {{ end }}
+        {{ end }}
+        </ul>
+        <div style="display: flex;">
+            <div>Show:</div>
+            <button
+                onclick="{{ action `ChangeFilter` "All" }}"
+                {{ if eq .FilterType "All" }}
+                    disabled
+                {{ end }}
+            >All</button>
+            <button
+                onclick="{{ action `ChangeFilter` "Active" }}"
+                {{ if eq .FilterType "Active" }}
+                    disabled
+                {{ end }}
+            >Active</button>
+            <button
+                onclick="{{ action `ChangeFilter` "Completed" }}"
+                {{ if eq .FilterType "Completed" }}
+                    disabled
+                {{ end }}
+            >Completed</button>
+        <div>
+    </div>
+</div>
+{{ end }}
