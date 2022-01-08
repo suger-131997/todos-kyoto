@@ -18,24 +18,9 @@
         </ul>
         <div style="display: flex;">
             <div>Show:</div>
-            <button
-                onclick="{{ action `ChangeFilter` .All }}"
-                {{ if eq .CurrentFilter .All }}
-                    disabled
-                {{ end }}
-            >{{ .All.String }}</button>
-            <button
-                onclick="{{ action `ChangeFilter` .Active }}"
-                {{ if eq .CurrentFilter .Active }}
-                    disabled
-                {{ end }}
-            >{{ .Active.String }}</button>
-            <button
-                onclick="{{ action `ChangeFilter` .Completed }}"
-                {{ if eq .CurrentFilter .Completed }}
-                    disabled
-                {{ end }}
-            >{{ .Completed.String }}</button>
+            {{ template "ComponentTodosFilterLink" .All}}
+            {{ template "ComponentTodosFilterLink" .Active}}
+            {{ template "ComponentTodosFilterLink" .Completed}}
         <div>
     </div>
 </div>

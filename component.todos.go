@@ -38,20 +38,20 @@ type ComponentTodos struct {
 	NewTitle   string
 	NextTodoId int
 
-	All       FilterType
-	Active    FilterType
-	Completed FilterType
+	All       kyoto.Component
+	Active    kyoto.Component
+	Completed kyoto.Component
 }
 
-func (c *ComponentTodos) Init() {
+func (c *ComponentTodos) Init(p kyoto.Page) {
 	c.CurrentFilter = All
 
 	c.NewTitle = ""
 	c.NextTodoId = 0
 
-	c.All = All
-	c.Active = Active
-	c.Completed = Completed
+	c.All = kyoto.RegC(p, &ComponentTodosFilterLink{All, &c.CurrentFilter})
+	c.Active = kyoto.RegC(p, &ComponentTodosFilterLink{Active, &c.CurrentFilter})
+	c.Completed = kyoto.RegC(p, &ComponentTodosFilterLink{Completed, &c.CurrentFilter})
 }
 
 func (c *ComponentTodos) FilteredTodos() []Todo {
