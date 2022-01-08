@@ -1,4 +1,4 @@
-module kyoto-from-scratch
+module todos-kyoto
 
 go 1.17
 
