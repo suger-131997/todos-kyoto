@@ -7,37 +7,35 @@
             <button onclick="{{ action `Add` }}" >Add Todo</button>
         </div>
         <ul>
-        {{ range .Todos }}
-            {{ if or (or (eq $.FilterType "All") (and (eq $.FilterType "Active") (not .Completed))) (and (eq $.FilterType "Completed") .Completed) }}
-                <li
-                    onclick="{{ action `Complete` .Id }}"
-                    {{ if .Completed }}
-                        style="text-decoration: line-through;"
-                    {{ end }}
-                >{{ .Title }}</li>
-            {{ end }}
+        {{ range .FilteredTodos }}
+            <li
+                onclick="{{ action `Complete` .Id }}"
+                {{ if .Completed }}
+                    style="text-decoration: line-through;"
+                {{ end }}
+            >{{ .Title }}</li>
         {{ end }}
         </ul>
         <div style="display: flex;">
             <div>Show:</div>
             <button
-                onclick="{{ action `ChangeFilter` "All" }}"
-                {{ if eq .FilterType "All" }}
+                onclick="{{ action `ChangeFilter` .All }}"
+                {{ if eq .CurrentFilter .All }}
                     disabled
                 {{ end }}
-            >All</button>
+            >{{ .All.String }}</button>
             <button
-                onclick="{{ action `ChangeFilter` "Active" }}"
-                {{ if eq .FilterType "Active" }}
+                onclick="{{ action `ChangeFilter` .Active }}"
+                {{ if eq .CurrentFilter .Active }}
                     disabled
                 {{ end }}
-            >Active</button>
+            >{{ .Active.String }}</button>
             <button
-                onclick="{{ action `ChangeFilter` "Completed" }}"
-                {{ if eq .FilterType "Completed" }}
+                onclick="{{ action `ChangeFilter` .Completed }}"
+                {{ if eq .CurrentFilter .Completed }}
                     disabled
                 {{ end }}
-            >Completed</button>
+            >{{ .Completed.String }}</button>
         <div>
     </div>
 </div>

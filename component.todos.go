@@ -10,22 +10,72 @@ type Todo struct {
 	Completed bool
 }
 
+type FilterType int
+
+const (
+	All FilterType = iota
+	Active
+	Completed
+)
+
+func (f FilterType) String() string {
+	switch f {
+	case All:
+		return "All"
+	case Active:
+		return "Active"
+	case Completed:
+		return "Completed"
+	}
+
+	return "Unknown"
+}
+
 type ComponentTodos struct {
-	Todos      []Todo
-	FilterType string
+	Todos         []Todo
+	CurrentFilter FilterType
 
 	NewTitle   string
 	NextTodoId int
+
+	All       FilterType
+	Active    FilterType
+	Completed FilterType
 }
 
 func (c *ComponentTodos) Init() {
-	c.FilterType = "All"
+	c.CurrentFilter = All
 
 	c.NewTitle = ""
 	c.NextTodoId = 0
+
+	c.All = All
+	c.Active = Active
+	c.Completed = Completed
 }
 
-//<!-- {{ if or (or (eq $.FilterType "All") (and (eq $.FilterType "Active") $todo.Completed)) ((eq $.FilterType "Completed") $todo.Completed) }} -->
+func (c *ComponentTodos) FilteredTodos() []Todo {
+	filtered := make([]Todo, 0)
+
+	if c.CurrentFilter == All {
+		filtered = append(filtered, c.Todos...)
+	} else if c.CurrentFilter == Active {
+		for _, todo := range c.Todos {
+			if !todo.Completed {
+				filtered = append(filtered, todo)
+			}
+		}
+	} else if c.CurrentFilter == Completed {
+		for _, todo := range c.Todos {
+			if todo.Completed {
+				filtered = append(filtered, todo)
+			}
+		}
+	}
+
+	return filtered
+}
+
 func (c *ComponentTodos) Actions() kyoto.ActionMap {
 	return kyoto.ActionMap{
 		"Add": func(args ...interface{}) {
@@ -42,7 +92,7 @@ func (c *ComponentTodos) Actions() kyoto.ActionMap {
 			}
 		},
 		"ChangeFilter": func(args ...interface{}) {
-			c.FilterType = args[0].(string)
+			c.CurrentFilter = FilterType(int(args[0].(float64)))
 		},
 	}
 }
