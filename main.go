@@ -14,9 +14,7 @@ func ssatemplate(p kyoto.Page) *template.Template {
 func main() {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/", kyoto.PageHandler(&PageIndex{}))
-	mux.HandleFunc("/todos", kyoto.PageHandler(&PageTodos{}))
-	mux.HandleFunc("/game", kyoto.PageHandler(&PageGame{}))
+	mux.HandleFunc("/", kyoto.PageHandler(&PageTodos{}))
 
 	mux.HandleFunc("/ssa/", kyoto.SSAHandler(ssatemplate))
 
