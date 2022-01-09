@@ -54,6 +54,27 @@ func (c *ComponentTodos) Init(p kyoto.Page) {
 	c.Completed = kyoto.RegC(p, &ComponentTodosFilterLink{Completed, &c.CurrentFilter})
 }
 
+func (c *ComponentTodos) Actions() kyoto.ActionMap {
+	return kyoto.ActionMap{
+		"Add": func(args ...interface{}) {
+			c.Todos = append(c.Todos, Todo{c.NextTodoId, c.NewTitle, false})
+			c.NewTitle = ""
+			c.NextTodoId++
+		},
+		"Complete": func(args ...interface{}) {
+			target := int(args[0].(float64))
+			for i := 0; i < len(c.Todos); i++ {
+				if c.Todos[i].Id == target {
+					c.Todos[i].Completed = !c.Todos[i].Completed
+				}
+			}
+		},
+		"ChangeFilter": func(args ...interface{}) {
+			c.CurrentFilter = FilterType(int(args[0].(float64)))
+		},
+	}
+}
+
 func (c *ComponentTodos) FilteredTodos() []Todo {
 	filtered := make([]Todo, 0)
 
@@ -74,25 +95,4 @@ func (c *ComponentTodos) FilteredTodos() []Todo {
 	}
 
 	return filtered
-}
-
-func (c *ComponentTodos) Actions() kyoto.ActionMap {
-	return kyoto.ActionMap{
-		"Add": func(args ...interface{}) {
-			c.Todos = append(c.Todos, Todo{c.NextTodoId, c.NewTitle, false})
-			c.NewTitle = ""
-			c.NextTodoId++
-		},
-		"Complete": func(args ...interface{}) {
-			target := int(args[0].(float64))
-			for i := 0; i < len(c.Todos); i++ {
-				if c.Todos[i].Id == target {
-					c.Todos[i].Completed = !c.Todos[i].Completed
-				}
-			}
-		},
-		"ChangeFilter": func(args ...interface{}) {
-			c.CurrentFilter = FilterType(int(args[0].(float64)))
-		},
-	}
 }

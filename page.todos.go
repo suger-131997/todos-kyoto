@@ -15,5 +15,6 @@ func (*PageTodos) Template() *template.Template {
 }
 
 func (p *PageTodos) Init() {
+	//コンポーネントの初期化
 	p.Todos = kyoto.RegC(p, &ComponentTodos{})
 }

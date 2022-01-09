@@ -14,9 +14,12 @@ func ssatemplate(p kyoto.Page) *template.Template {
 func main() {
 	mux := http.NewServeMux()
 
+	// ルーティングの設定
 	mux.HandleFunc("/", kyoto.PageHandler(&PageTodos{}))
 
+	// SSA用の設定
 	mux.HandleFunc("/ssa/", kyoto.SSAHandler(ssatemplate))
 
+	// サーバー起動
 	http.ListenAndServe("localhost:9000", mux)
 }
